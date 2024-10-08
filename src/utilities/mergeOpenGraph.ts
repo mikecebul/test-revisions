@@ -1,13 +1,12 @@
 import type { Metadata } from 'next'
+import { baseUrl } from './baseUrl'
 
 const defaultOpenGraph: Metadata['openGraph'] = {
   type: 'website',
   description: 'An open-source website built with Payload and Next.js.',
   images: [
     {
-      url: process.env.NEXT_PUBLIC_SERVER_URL
-        ? `${process.env.NEXT_PUBLIC_SERVER_URL}/website-template-OG.webp`
-        : '/website-template-OG.webp',
+      url: baseUrl ? `${baseUrl}/website-template-OG.webp` : '/website-template-OG.webp',
     },
   ],
   siteName: 'Payload Website Template',

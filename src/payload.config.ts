@@ -35,6 +35,7 @@ import { Page, Post } from 'src/payload-types'
 
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
+import { baseUrl } from './utilities/baseUrl'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -44,9 +45,7 @@ const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
 }
 
 const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
-  return doc?.slug
-    ? `${process.env.NEXT_PUBLIC_SERVER_URL!}/${doc.slug}`
-    : process.env.NEXT_PUBLIC_SERVER_URL!
+  return doc?.slug ? `${baseUrl}/${doc.slug}` : baseUrl
 }
 
 export default buildConfig({
@@ -120,7 +119,8 @@ export default buildConfig({
   }),
   db: sqliteAdapter({
     client: {
-      url: process.env.DATABASE_URI || '',
+      url: process.env.LOCAL_DATABASE_URL ?? process.env.TURSO_DATABASE_URL!,
+      authToken: process.env.LOCAL_DATABASE_URL ? undefined : process.env.TURSO_AUTH_TOKEN,
     },
   }),
   collections: [Pages, Posts, Media, Categories, Users],
